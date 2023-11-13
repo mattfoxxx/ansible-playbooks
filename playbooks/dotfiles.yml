@@ -1,0 +1,80 @@
+---
+- name: Install dotfiles and applications
+  hosts: all
+  connection: local
+  strategy: debug
+  roles:
+    - {
+      role: mattfoxxx.dotfiles.setup,
+      tags: ["all", "setup", "always"],
+      when: ansible_distribution == "Archlinux"
+    }
+    - {
+      role: mattfoxxx.dotfiles.tmux,
+      tags: ["all", "tmux"],
+    }
+    - {
+      role: mattfoxxx.dotfiles.vim,
+      tags: ["all", "vim"],
+    }
+    - {
+      role: mattfoxxx.dotfiles.nvim,
+      tags: ["all", "nvim"],
+    }
+    - {
+      role: mattfoxxx.dotfiles.zsh,
+      tags: ["all", "zsh"],
+    }
+    - {
+      role: mattfoxxx.dotfiles.rbenv,
+      tags: ["all", "rbenv"],
+    }
+    - {
+      role: mattfoxxx.dotfiles.syncthing,
+      tags: ["all", "syncthing"],
+    }
+    - {
+      role: mattfoxxx.dotfiles.pyenv,
+      tags: ["all", "pyenv"],
+    }
+    - {
+      role: mattfoxxx.dotfiles.testkitchen,
+      tags: ["all", "testkitchen"],
+    }
+    - {
+      role: mattfoxxx.dotfiles.golang,
+      tags: ["all", "golang", "devops"],
+    }
+    - {
+      role: mattfoxxx.dotfiles.terraform,
+      tags: ["all", "terraform", "devops"],
+    }
+    - {
+      role: mattfoxxx.dotfiles.rclone,
+      tags: ["all", "rclone", "shell"],
+    }
+
+  tasks:
+    - name: Debug users var
+      ansible.builtin.debug:
+        var: users
+      tags: debug
+    - name: Debug tmux_config var
+      ansible.builtin.debug:
+        var: tmux_config
+      tags: debug
+    - name: Debug vim_config var
+      ansible.builtin.debug:
+        var: vim_config
+      tags: debug
+
+    - name: __________POST INSTALL MESSAGE__________
+      ansible.builtin.debug:
+        msg:
+          - 'Things left to do:'
+          - '- TMUX:   use `prefix+I` to install plugins'
+          - '- VIM:    Execute in vim :PluginInstall'
+          - '- RCLONE: `rclone config` and follow the steps'
+          - '  RCLONE: `systemctl --user start rclone.service`'
+      tags:
+        - always
